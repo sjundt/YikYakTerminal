@@ -55,6 +55,18 @@ class Comment:
 		except:
 			pass
 
+	def asDict(self):
+		result= {}
+		result["client"] = self.client
+		result["message_id"] = self.message_id
+		result["comment_id"] = self.comment_id
+		result["comment"]  = self.comment
+		result["time"] = self.time
+		result["likes"] = self.likes
+		result["poster_id"] = self.poster_id
+		result["liked"] = self.liked
+		return result
+
 	def upvote(self):
 		if self.liked == 0:
 			self.likes += 1
