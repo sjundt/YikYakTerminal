@@ -24,7 +24,10 @@ class YikYakApi:
 
 	def get_current_yaks(self):
 		currentlist = self.remoteyakker.get_yaks()
-		return(self.read(currentlist))
+		current_yaks = self.read(currentlist)
+		sorted_yaks = sorted(current_yaks, key=lambda k: k['likes'])
+		sorted_yaks.reverse()
+		return(sorted_yaks)
 	
 	def setUserID(self, location, userID=None):
 		self.remoteyakker = pk.Yakker(userID, location, False)
