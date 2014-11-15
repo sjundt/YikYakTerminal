@@ -157,33 +157,33 @@ class Yak:
 	def get_comments(self):
 		return self.client.get_comments(self.message_id)
 
-	def print_yak(self):
+	def print_yak(self,outFile):
 		try:
 			if self.handle is not None:
-				print ("### %s ###" % self.handle)
-			print ()
-			print (self.message)
+				outFile.write("### %s ###" % self.handle)
+			outFile.write("\n")
+			outFile.write(self.message)
 			# Show arrow if yak is upvoted or downvoted
 			my_action = ""
 			if self.liked > 0:
 				my_action = "^ "
 			elif self.liked < 0:
 				my_action = "v "
-			print ("\n\t%s%s likes  |  Posted  %s  at  %s %s" % (my_action, self.likes, self.time, self.latitude, self.longitude))
+			outFile.write("\n\t%s%s likes  |  Posted  %s  at  %s %s" % (my_action, self.likes, self.time, self.latitude, self.longitude))
 		# Fix for emoji crash: filter emoji if not supported
 		except UnicodeEncodeError:
 			self.message = re.sub('[^\x00-\x7F]', '',self.message)
 			if self.handle is not None:
-				print ("### %s ###" % self.handle)
-			print ()
-			print (self.message)
+				outFile.write("### %s ###" % self.handle)
+			outFile.write()
+			outFile.write(self.message)
 			# Show arrow if yak is upvoted or downvoted
 			my_action = ""
 			if self.liked > 0:
 				my_action = "^ "
 			elif self.liked < 0:
 				my_action = "v "
-			print ("\n\t%s%s likes  |  Posted  %s  at  %s %s" % (my_action, self.likes, self.time, self.latitude, self.longitude))
+			outFile.write("\n\t%s%s likes  |  Posted  %s  at  %s %s" % (my_action, self.likes, self.time, self.latitude, self.longitude))
 
 class Yakker:
 	base_url = "https://us-east-api.yikyakapi.net/api/"
