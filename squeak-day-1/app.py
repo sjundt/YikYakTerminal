@@ -6,8 +6,8 @@ app = Flask(__name__, static_path='/static')
 
 @app.route('/')
 def index():
-	numbers = [0,1,2,3,4,5]
-	return render_template('index.html',numbers = numbers)
+	yaks = [0,1,2,3,4,5]
+	return render_template('index.html',yaks = yaks)
 
 @app.route('/results', methods=['POST'])
 def results():

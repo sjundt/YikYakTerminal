@@ -1,30 +1,22 @@
 <!doctype html>
 <html>
 <head>
-    <title>Squeak</title>
+    <title>Be Careful What You Yik Yak</title>
     <link rel="stylesheet" type="text/css" href="/static/styles.css">
 </head>
 <body>
 <div class="page">
-    <h1>Squeak</h1>
+    <img width='250px' height='250px' align="center"src="/static/yak-head.svg" />
+    <h1>Be careful what you Yik Yak</h1>
                 
-    <h2>Search</h2>
-    <form action="/results" method="POST" class="search-box">
-        <input type="text" size="30" placeholder="Restaurants" name="term">
-        <input type="text" size="20" placeholder="Claremont" name="location">
-        <input type="submit" value="Search">
-    </form>
-
-    <h2>Saved</h2>
+    <h2>becuase we know where you live...</h2>
     
     <ul>
-        {% for num in numbers %}
+        {% for num in yaks %}
         <li>{{num+1}}</li>
         {%endfor%}
     </ul>
 
-
-    <img width='50px' height='50px' src="/static/fork-knife.jpg" />
 </div>
 </body>
 </html>
