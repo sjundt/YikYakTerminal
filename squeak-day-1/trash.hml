@@ -1,0 +1,19 @@
+<ul class='entries'>
+        <li>
+            <div>
+                <h4 class='entry-title'><a href="http://www.yelp.com/biz/tutti-mangia-italian-grill-claremont-3">Tutti Mangia Italian Grill</a></h4>
+                <p class='entry-info'>Italian, Caterers <br />
+                102 Harvard Ave, Claremont, CA 91711 <br />
+                +1-909-625-4669 <br /></p>
+            </div>
+        </li>
+
+        <li>
+            <div>
+                <h4 class='entry-title'><a href="http://www.yelp.com/biz/aruffos-italian-cuisine-claremont">Aruffo&#39;s Italian Cuisine</a></h4>
+                <p class='entry-info'>Italian <br />
+                126 Yale Ave, Claremont, CA 91711 <br />
+                +1-909-624-9624 <br /></p>
+            </div>
+        </li>
+    </ul>
