@@ -1,0 +1,31 @@
+body {
+	font-family: 'Helvetica';
+	background: none;
+}
+
+a, h1, h2 {
+	color: #377BA8;
+}
+
+h1 {
+	font-family: 'Georgia';
+	border-bottom: 2px solid #eee;
+}
+
+h2 {
+	font-family: 'Apple Chancery';
+	font-size: 1.5em;
+}
+
+.squeak_page {
+	width: 35em;
+	border: 5px solid #ccc;
+	background: #FFF0FF;
+	padding: 0.8em;
+	margin: 2em auto;
+}
+
+#logo {
+	font-family: 'Geneva';
+	font-size: 4em;
+}
