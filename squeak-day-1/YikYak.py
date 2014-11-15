@@ -6,6 +6,12 @@ import datetime
 
 from time import strftime, gmtime, sleep
 from datetime import datetime, timedelta
+from flask import (
+    Flask,
+    abort,
+    jsonify,
+    render_template,
+    request)
 
 class YikYakApi:
 	def __init__(self, location_str="Claremont Colleges", user=None):
@@ -60,6 +66,52 @@ class YikYakApi:
 			result.append(thisYak)
 			yakNum += 1
 		return result
-		
-yak = YikYakApi()
-print(yak.get_current_yaks())
+
+app = Flask(__name__, static_url_path='')
+app.debug = True
+
+API = YikYakApi()
+YAKS = 0
+
+@app.route('/')
+def index():
+    API = YikYakApi()
+	YAKS = yak.get_current_yaks())
+    return render_template('index.html', yaks=YAKS)
+
+
+# @app.route('/todos/', methods=['POST'])
+# def todo_create():
+#     todo = request.get_json()
+#     db.session.add(Item(todo))
+#     db.session.commit()
+#     return "Good"
+
+
+# @app.route('/todos/<int:id>')
+# def todo_read(id):
+#     todo = db.session.query(Item).filter(Item.id==id).first()
+#     if todo==None:
+#         abort(404) #send error message
+#     return jsonify(todo.serialize())
+
+
+# @app.route('/todos/<int:id>', methods=['PUT', 'PATCH'])
+# def todo_update(id):
+#     new_item = request.get_json()
+#     print request.get_json
+#     print new_item[u'title']
+#     db.session.query(Item).filter(Item.id==id).update({Item.title:new_item[u'title']})
+#     print "NEW IN DB:", db.session.query(Item).filter(Item.id==id).all()
+#     db.session.commit()
+#     return "Fine"
+
+
+# @app.route('/todos/<int:id>', methods=['DELETE'])
+# def todo_delete(id):
+#     db.session.query(Item).filter(Item.id==id).delete()
+#     db.session.commit()
+#     return "Fine"
+
+if __name__ == '__main__':
+    app.run(port=8000)
