@@ -9,11 +9,15 @@
     <img width='250px' height='250px' align="center"src="/static/yak-head.svg" />
     <h1>Be careful what you Yik Yak</h1>
                 
-    <h2>becuase we know where you live...</h2>
+    <h2>because we know where you live...</h2>
     
     <ul>
         {% for yak in yaks %}
-        <li>{{yak}}</li>
+        <li>
+            <p>{{yak.message}}</p>
+            <p>Likes:  {{yak.likes}}</p>
+        </li>
+
         {%endfor%}
     </ul>
 
