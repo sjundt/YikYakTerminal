@@ -4,7 +4,7 @@ import pygeocoder
 import requests
 import datetime
 
-from time import strftime, gmtime
+from time import strftime, gmtime, sleep
 from datetime import datetime, timedelta
 
 def main():
@@ -37,7 +37,7 @@ def main():
 		
 		# If location retrieval fails, ask user for coordinates
 		if coordlocation == 0:
-			print("Please enter coordinates manually: ")
+			# print("Please enter coordinates manually: ")
 			
 			currentlatitude = input("Latitude: ")
 			currentlongitude = input("Longitude: ")
@@ -79,7 +79,15 @@ def main():
 	# When actions are completed, user can execute another action or quit the app
 	# colleges = ["Columbia University","Claremont Colleges","Georgia Southern University","Texas A&M","Clemson University","Wake Forest University","Stanford University","Colgate University","University of Utah"]
 	collegeFiles = {"Columbia University":"columbiaFile.txt","Claremont Colleges":"claremontFile.txt","Georgia Southern University":"georgiaFile.txt","Texas A&M":"texasFile.txt","Clemson University":"clemsonFile.txt","Wake Forest University":"wakeFile.txt","Stanford University":"stanfordFile.txt","Colgate University":"colgateFile.txt","University of Utah":"utahFile.txt"}
+	timeRadius = 5
+	timesToCollect = {"1hour":(60-timeRadius,60+timeRadius),"2hour":(120-timeRadius,120+timeRadius),"3hour":(180-timeRadius,180+timeRadius),"4hour":(240-timeRadius,240+timeRadius)}
+	start_moment = datetime.now()-timedelta(minutes = timeRadius * 2)
 	while True:
+		end_moment = datetime.now()
+		time_to_sleep = start_moment + timedelta(minutes = timeRadius * 2) - end_moment
+		if (time_to_sleep.total_seconds() >0):
+			sleep(time_to_sleep.total_seconds())
+		start_moment = datetime.now()
 		
 		# Locations to query
 		# Columbia University
@@ -93,21 +101,20 @@ def main():
 		# University of Utah
 
 		for (schoolName,schoolFile) in collegeFiles.items() :
-			print(schoolName,schoolFile)
-			outFile = open(schoolFile,"a")
 
 			coordlocation = changeLocation(geocoder, schoolName)
 			remoteyakker.update_location(coordlocation)
-
 			currentlist = remoteyakker.get_yaks()
-			read(currentlist,outFile)
 
-			outFile.close()
+			for (folderName,times) in timesToCollect.items():
 
-
+				outFile = open("data/"+folderName+"/"+schoolFile,"a")
+				# print(schoolName,schoolFile)
+				read(currentlist,outFile, times)
+				outFile.close()
 		
 		# Insert line gap
-		print()
+		# print()
 		
 		# Show all action choices
 		# choice = input("*Read Latest Yaks\t\t(R)\n*Read Top Local Yaks\t\t(T)\n\n*Read Best Yaks of All Time\t(B)\n\n*Show User Yaks\t\t\t(S)\n*Show User Comments\t\t(O)\n\n*Post Yak\t\t\t(P) or (P <message>)\n*Post Comment\t\t\t(C) or (C <yak#>)\n\n*Upvote Yak\t\t\t(U) or (U <yak#>)\n*Downvote Yak\t\t\t(D) or (D <yak#>)\n*Report Yak\t\t\t(E) or (E <yak#>)\n\n*Upvote Comment\t\t\t(V) or (V <yak# comment#>)\n*Downvote Comment\t\t(H) or (H <yak# comment#>)\n*Report Comment\t\t\t(M) or (M <yak# comment#>)\n\n*Yakarma Level\t\t\t(Y)\n\n*Choose New User ID\t\t(I) or (I <userID>)\n*Choose New Location\t\t(L) or (L <location>)\n\n*Contact Yik Yak\t\t(F)\n\n*Quit App\t\t\t(Q)\n\n-> ")
@@ -200,37 +207,41 @@ def changeLocation(geocoder, address=""):
 		
 	return coordlocation
 	
-def read(yaklist,outFile):
+def read(yaklist,outFile, times):
+	(start_time, end_time) = times
 	yakNum = 1
 	for yak in yaklist:
-		# line between yaks
-		outFile.write("_" * 93)
-		# show yak
-		outFile.write("\n" + str(yakNum) + "\n")
+		
 		now = datetime.now() + timedelta(hours=3)
-		outFile.write(str(now.year)+"-"+str(now.month)+"-"+str(now.day)+" "+str(now.hour)+":"+str(now.minute)+":"+str(now.second))
-
 		yakTime = datetime.strptime(yak.time, "%Y-%m-%d %H:%M:%S")
-		print(str(now - yakTime))
-		print(now)
-		print(yak.time)
-		
-
-		yak.print_yak(outFile)
-		
-		commentNum = 1
-		# comments header
-		comments = yak.get_comments()
-		# number of comments
-		outFile.write("\n\tComments: "+str(len(comments))+"\n")
-		
-		# # print all comments separated by dashes
-		# for comment in comments:
-		# 	outFile.write("\t   {0:>4}".format(commentNum), end=' ')
-		# 	print ("-" * 77)
-		# 	comment.print_comment()
-		# 	commentNum += 1
+		timeDiff = now - yakTime
+		leastTime = timedelta(minutes=start_time)
+		mostTime = timedelta(minutes = end_time)
+		# if (timeDiff.month ==0 and timeDiff.day ==0 and
+		# 	((timeDiff.hour <1 and timeDiff.minute >=55) or (timeDiff.hour ==1 and timeDiff.minute <=5))):
+		if (timeDiff < mostTime and timeDiff > leastTime):
+			# line between yaks
+			outFile.write("_" * 93)
+			# show yak
+			outFile.write("\n" + str(yakNum) + "\n")
 			
-		yakNum += 1
+			outFile.write(str(now.year)+"-"+str(now.month)+"-"+str(now.day)+" "+str(now.hour)+":"+str(now.minute)+":"+str(now.second))
+
+			yak.print_yak(outFile)
+			
+			commentNum = 1
+			# comments header
+			comments = yak.get_comments()
+			# number of comments
+			outFile.write("\n\tComments: "+str(len(comments))+"\n")
+			
+			# # print all comments separated by dashes
+			# for comment in comments:
+			# 	outFile.write("\t   {0:>4}".format(commentNum), end=' ')
+			# 	print ("-" * 77)
+			# 	comment.print_comment()
+			# 	commentNum += 1
+				
+			yakNum += 1
 		
 main()
